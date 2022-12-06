@@ -12,6 +12,8 @@ const playlistSchema = new Schema(
         ownerEmail: { type: String, required: true },
         likes: {type: [], required: true},
         dislikes: {type: [], required: true},
+        publish: {type: Boolean, require: true},
+        publishDate: {type: String, require: true},
         songs: { type: [{
             title: String,
             artist: String,

@@ -282,7 +282,7 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, [], []);
+        const response = await api.createPlaylist(newListName, [], auth.user.email, [], [], false, null);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -299,6 +299,49 @@ function GlobalStoreContextProvider(props) {
             console.log("API FAILED TO CREATE A NEW LIST");
         }
     }
+
+    store.publishDate = function(id){
+        async function asyncPublishDateList(id){
+            const response = await api.getPlaylistById(id);
+            if(response.data.success){
+                let playlist = response.data.playlist;
+                playlist.publish = true;
+                let status = "";
+
+                const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+                const timeStamp = new Date();
+                let year = timeStamp.getFullYear();
+                let month = months[timeStamp.getMonth()];
+                let day = timeStamp.getDate();
+                status = month + " " + day + ","+ year;
+                console.log(status);
+
+                console.log("STATUS:", status);
+                playlist.publishDate = status;
+                
+                async function updateList(playlist) {
+                    const response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            const response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncPublishDateList(id);
+    }
+    
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {

@@ -178,10 +178,6 @@ function ListCard(props) {
     if(store.currentList !== null){
         if(store.currentList.publish){
             publishDate=
-            <Grid item xs={6} sx={{ p: 1 }}></Grid>;
-        }
-        else{
-            publishDate=
             <Grid item xs={6} sx={{ p: 1 }}>
                 <Typography
                   style={{
@@ -207,6 +203,9 @@ function ListCard(props) {
                   {idNamePair.publishDate}
                 </Typography>
             </Grid>
+        }
+        else{
+            <Grid item xs={6} sx={{ p: 1 }}></Grid>;
         }
     }
 
@@ -251,8 +250,8 @@ function ListCard(props) {
     }
 
     function handlePublish(event, id){
-        //store.publish(id);
         store.publishDate(id);
+        event.currentTarget.disabled = true;
     }
 
     let selectClass = "unselected-list-card";
@@ -291,7 +290,7 @@ function ListCard(props) {
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             // }}
-            // onDoubleClick={toggleEdit}
+            onDoubleClick={toggleEdit}
         >
             <Grid container spacing={1}>
            <Grid item xs={6}
@@ -382,7 +381,7 @@ function ListCard(props) {
                         </Typography>
                         </Grid>
                         
-                {publishDate}
+                    {publishDate}
                 <Grid item xs={3}>
                 <Typography
                   style={{

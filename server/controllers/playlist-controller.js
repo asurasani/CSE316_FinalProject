@@ -152,7 +152,10 @@ getPlaylistPairs = async (req, res) => {
                             _id: list._id,
                             name: list.name,
                             likes: list.likes,
-                            dislikes: list.dislikes
+                            dislikes: list.dislikes,
+                            publish: list.publish,
+                            publishDate: list.publishDate
+                            
                         };
                         pairs.push(pair);
                     }
@@ -220,6 +223,8 @@ updatePlaylist = async (req, res) => {
                     list.songs = body.playlist.songs;
                     list.likes = body.playlist.likes;
                     list.dislikes = body.playlist.dislikes;
+                    list.publish = body.playlist.publish;
+                    list.publishDate= body.playlist.publishDate;
                     list
                         .save()
                         .then(() => {
