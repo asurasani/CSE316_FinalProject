@@ -31,7 +31,8 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    GUEST_STATUS: "GUEST_STATUS"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -58,7 +59,8 @@ function GlobalStoreContextProvider(props) {
         newListCounter: 0,
         listNameActive: false,
         listIdMarkedForDeletion: null,
-        listMarkedForDeletion: null
+        listMarkedForDeletion: null,
+        guestStatus: false
     });
     const history = useHistory();
 
@@ -86,6 +88,20 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null
                 });
+            }
+            case GlobalStoreActionType.GUEST_STATUS: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: [],
+                    currentList: null,
+                    currentSongIndex : -1,
+                    currentSong : null,
+                    newListCounter: 0,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    guestStatus: payload
+                })
             }
             // STOP EDITING THE CURRENT LIST
             case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
@@ -230,6 +246,13 @@ function GlobalStoreContextProvider(props) {
         }
         asyncSetCurrentList(id);
         history.push("/playlist/635f203d2e072037af2e6284");
+    }
+
+    store.setGuest = function(){
+        storeReducer({
+            type: GlobalStoreActionType.GUEST_STATUS,
+            payload: true
+        })
     }
 
     store.sortName = function(){

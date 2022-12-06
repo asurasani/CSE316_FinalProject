@@ -99,6 +99,10 @@ const HomeScreen = (props) => {
         store.sortName();
         handleClose();
     }
+
+    const handleSortDate = () => {
+        handleClose()
+    }
       
     
         const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -248,7 +252,7 @@ const HomeScreen = (props) => {
                     </Grid>
                 </Grid>
             </div>
-            <Statusbar />
+            {/* <Statusbar /> */}
         </div>
     )}
 
