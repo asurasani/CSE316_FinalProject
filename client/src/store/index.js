@@ -232,6 +232,31 @@ function GlobalStoreContextProvider(props) {
         history.push("/playlist/635f203d2e072037af2e6284");
     }
 
+    store.sortName = function(){
+        async function getListPairs() {
+            const response = await api.getPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                console.log(pairsArray[0].name);
+                pairsArray.sort((element1, element2) => {
+                    let name1 = element1.name, 
+                    name2 = element2.name;
+
+                    if(name1 < name2){return -1;}
+                    if(name2 > name1){return 1;}
+                    else{return 0;}
+                });
+                pairsArray.forEach((e) => console.log(e));
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+        }
+        getListPairs();
+    }
+
     // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
     // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN 
     // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.

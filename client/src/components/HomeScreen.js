@@ -11,6 +11,11 @@ import InputBase from '@mui/material/InputBase';
 import SortOutlinedIcon from '@mui/icons-material/SortOutlined';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import SortIcon from '@mui/icons-material/Sort';
+import Button from '@mui/material/Button';
+
 
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab'
@@ -80,6 +85,20 @@ const HomeScreen = (props) => {
           'aria-controls': `simple-tabpanel-${index}`,
         };
       }
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleNameSort = () =>{
+        store.sortName();
+        handleClose();
+    }
       
     
         const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -178,6 +197,29 @@ const HomeScreen = (props) => {
                                                 inputProps={{ 'aria-label': 'search' }}
                                                 />
                                 </Search>
+                                <Button
+                                    id="basic-button"
+                                    aria-controls={open ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? 'true' : undefined}
+                                    onClick={handleClick}
+                                >
+                                    <SortIcon />
+                                </Button>
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                    MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}>
+                                    <MenuItem onClick={handleNameSort}>Name (A-Z)</MenuItem>
+                                    <MenuItem onClick={handleClose}>Publish Date(Newest)</MenuItem>
+                                    <MenuItem onClick={handleClose}>Listens (High-Low)</MenuItem>
+                                    <MenuItem onClick={handleClose}>Likes (High-Low)</MenuItem>
+                                    <MenuItem onClick={handleClose}>DisLikes (High-Low)</MenuItem>
+                                </Menu>
                                 <Box sx={{ flexGrow: 1 }} />
                             </Toolbar>        
                         </AppBar>    
