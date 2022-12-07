@@ -4,7 +4,7 @@ import { GlobalStoreContext } from "../store";
 import AuthContext from "../auth";
 import TextField from "@mui/material/TextField";
 
-function Comments() {
+function CommentBox() {
   const { store } = useContext(GlobalStoreContext);
   const { auth } = useContext(AuthContext);
 
@@ -38,4 +38,4 @@ function Comments() {
   );
 }
 
-export default Comments;
+export default CommentBox;

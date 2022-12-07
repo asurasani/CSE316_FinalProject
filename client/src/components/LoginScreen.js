@@ -29,6 +29,8 @@ export default function LoginScreen() {
 
     };
 
+   //auth.loginUser('guest', 'guest')
+
     let modalJSX = "";
     console.log(auth);
     if (auth.errorMessage !== null){

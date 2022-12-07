@@ -32,7 +32,8 @@ export const GlobalStoreActionType = {
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
-    GUEST_STATUS: "GUEST_STATUS"
+    GUEST_STATUS: "GUEST_STATUS",
+    UPDATE_PLAY_SONG: "UPDATE_PLAY_SONG"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -60,7 +61,9 @@ function GlobalStoreContextProvider(props) {
         listNameActive: false,
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null,
-        guestStatus: false
+        guestStatus: false,
+        currentPlayerIndex: null,
+        
     });
     const history = useHistory();
 
@@ -170,7 +173,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentPlayIndex: 0
                 });
             }
             // START EDITING A LIST NAME
@@ -227,6 +231,24 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null
                 });
             }
+
+            case GlobalStoreActionType.UPDATE_PLAY_SONG: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    allPlaylists: store.allPlaylists,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    deleteSongIndex: -1,
+                    deleteSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentPlayIndex: payload
+                })
+            }
             default:
                 return store;
         }
@@ -280,6 +302,12 @@ function GlobalStoreContextProvider(props) {
         }
         getListPairs();
     }
+    store.updatePlaySong = async function (index) {
+        storeReducer({
+          type: GlobalStoreActionType.UPDATE_PLAY_SONG,
+          payload: index,
+        });
+      };
 
     store.sortDate = function(){
         async function getListPairs(){

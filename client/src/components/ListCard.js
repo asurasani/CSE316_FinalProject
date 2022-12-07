@@ -350,7 +350,7 @@ function ListCard(props) {
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             // }}
-            onDoubleClick={toggleEdit}
+            // onDoubleClick={toggleEdit}
         >
             <Grid container spacing={1}>
            <Grid item xs={6}

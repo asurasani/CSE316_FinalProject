@@ -1,4 +1,4 @@
-function Comment(props) {
+function CommentCard(props) {
     let cardClass = "list-card unselected-list-card";
     let { comment } = props;
     console.log(comment);
@@ -9,4 +9,4 @@ function Comment(props) {
     );
   }
   
-  export default Comment;
+  export default CommentCard;

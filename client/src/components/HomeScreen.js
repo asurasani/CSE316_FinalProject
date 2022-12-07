@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom'
-// import YoutubePlayer from './YoutubePlayer';
+import YoutubePlayer from './YoutubePlayer';
 
 import AddIcon from '@mui/icons-material/Add';
 import { styled, alpha } from '@mui/material/styles';
@@ -68,24 +68,11 @@ function TabPanel(props) {
     };
     const { store } = useContext(GlobalStoreContext);
     const history = useHistory()
+    const [player, setPlayer] = useState(true);
 
-    // let commentCard = "";
-    // if(store){
-    //     if(store.currentList){
-    //         commentCard = 
-    //         <List sx={{overflow: 'scroll'}}>
-    //             {
-    //                 store.currentList.comments.map((name, comment) =>(
-    //                     <CommentCard 
-    //                         name={name}
-    //                         comment={comment}
-    //                     />
-    //                 ))
-    //             }
-
-    //         </List>
-    //     }
-    // }
+    function handlePlayerSet() {
+        setPlayer(!player);
+      }
 
     const Search = styled('div')(({ theme }) => ({
         position: 'relative',
@@ -282,9 +269,9 @@ function TabPanel(props) {
                             </Tabs>
                         </Box>
 
-                        <TabPanel value={value} index={0}>
-                            {/* <YoutubePlayer /> */}
-                            YoutubePlayer
+                        <TabPanel value={value} index={0} >
+                            {player && <YoutubePlayer />}
+                            
                         </TabPanel>
 
                         <TabPanel value={value} index={1}>
