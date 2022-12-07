@@ -3,7 +3,6 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom'
 // import YoutubePlayer from './YoutubePlayer';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -16,8 +15,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SortIcon from '@mui/icons-material/Sort';
 import Button from '@mui/material/Button';
-import CommentBox from "./CommentBox";
-import TextField from "@mui/material/TextField";
 
 
 import Box from '@mui/material/Box';
@@ -60,32 +57,13 @@ function TabPanel(props) {
       </div>
     );
   }
-    const HomeScreen = (props) => {
+const GuestScreen = () => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     const { store } = useContext(GlobalStoreContext);
-    const history = useHistory()
-
-    // let commentCard = "";
-    // if(store){
-    //     if(store.currentList){
-    //         commentCard = 
-    //         <List sx={{overflow: 'scroll'}}>
-    //             {
-    //                 store.currentList.comments.map((name, comment) =>(
-    //                     <CommentCard 
-    //                         name={name}
-    //                         comment={comment}
-    //                     />
-    //                 ))
-    //             }
-
-    //         </List>
-    //     }
-    // }
 
     const Search = styled('div')(({ theme }) => ({
         position: 'relative',
@@ -117,26 +95,8 @@ function TabPanel(props) {
         setAnchorEl(null);
     };
 
-    const handleHome = () => {
-        history.push("/");
-    }
-
     const handleNameSort = () =>{
         store.sortName();
-        handleClose();
-    }
-
-    const handleDateSort = () =>{
-        store.sortDate();
-        handleClose();
-    }
-
-    const handleLikesSort = () => {
-        store.sortLikes();
-        handleClose();
-    }
-    const handleDisLikesSort = () => {
-        store.sortDislikes();
         handleClose();
     }
 
@@ -144,7 +104,7 @@ function TabPanel(props) {
         handleClose()
     }
       
-
+    
         const SearchIconWrapper = styled('div')(({ theme }) => ({
             padding: theme.spacing(0, 2),
             height: '100%',
@@ -180,9 +140,6 @@ function TabPanel(props) {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
     let listCard = "";
     if (store) {
         listCard =
@@ -211,9 +168,8 @@ function TabPanel(props) {
                                     color="inherit"
                                     aria-label="open drawer"
                                     sx={{ mr: 2}}
-                                    onClick={handleHome}
                                 >
-                                    <HomeOutlinedIcon />
+                                    {/* <HomeOutlinedIcon /> */}
                                 </IconButton>
                                 <IconButton
                                     size="large"
@@ -260,10 +216,10 @@ function TabPanel(props) {
                                     'aria-labelledby': 'basic-button',
                                 }}>
                                     <MenuItem onClick={handleNameSort}>Name (A-Z)</MenuItem>
-                                    <MenuItem onClick={handleDateSort}>Publish Date(Newest)</MenuItem>
+                                    <MenuItem onClick={handleClose}>Publish Date(Newest)</MenuItem>
                                     <MenuItem onClick={handleClose}>Listens (High-Low)</MenuItem>
-                                    <MenuItem onClick={handleLikesSort}>Likes (High-Low)</MenuItem>
-                                    <MenuItem onClick={handleDisLikesSort}>DisLikes (High-Low)</MenuItem>
+                                    <MenuItem onClick={handleClose}>Likes (High-Low)</MenuItem>
+                                    <MenuItem onClick={handleClose}>DisLikes (High-Low)</MenuItem>
                                 </Menu>
                                 <Box sx={{ flexGrow: 1 }} />
                             </Toolbar>        
@@ -288,16 +244,15 @@ function TabPanel(props) {
                         </TabPanel>
 
                         <TabPanel value={value} index={1}>
-                            <CommentBox/>
+                            Comments
                         </TabPanel>
                     </Grid>
                 </Grid>
             </div>
-            <Statusbar />
         </div>
     )}
 
-export default HomeScreen;
+export default GuestScreen;
 
 // //{
 //     listCard

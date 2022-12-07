@@ -3,6 +3,9 @@ import EditToolbar from './EditToolbar'
 import HomeScreen from './HomeScreen'
 import HomeWrapper from './HomeWrapper'
 import ListCard from './ListCard'
+import CommentCard from './CommentCard'
+import CommentBox from './CommentBox'
+import GuestScreen from './GuestScreen'
 import LoginScreen from './LoginScreen'
 import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
@@ -20,7 +23,9 @@ import WorkspaceScreen from './WorkspaceScreen'
     @author McKilla Gorilla
 */
 export { 
-    AppBanner,  
+    AppBanner,
+    CommentCard,
+    GuestScreen,  
     EditToolbar, 
     HomeScreen,
     HomeWrapper,

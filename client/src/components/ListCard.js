@@ -133,26 +133,28 @@ function ListCard(props) {
     let publishStatus="";
     let addSongs="";
     let publishDate="";
+    let likeCard = "";
+    let dislikeCard = "";
 
-    // if(store.currentList !== null){
-    //     if(store.currentList.publish){
-    //         publishStatus=
-    //         <Grid item xs={12}>
-    //             <button>Delete</button> 
-    //             <button>Duplicate</button>
-    //         </Grid>
-    //     }
-    //     else{
-    //         publishStatus=
-    //         <Grid item xs={12}>
-    //             <button>Undo</button> 
-    //             <button>Redo</button>
-    //             <button onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button>
-    //             <button>Delete</button> 
-    //             <button onClick={() => handleDuplicate()}>Duplicate</button>
-    //         </Grid>
-    //     }
-    // }
+    if(store.currentList !== null){
+        if(store.currentList.publish){
+            publishStatus=
+            <Grid item xs={12}>
+                <button>Delete</button> 
+                <button>Duplicate</button>
+            </Grid>
+        }
+        else{
+            publishStatus=
+            <Grid item xs={12}>
+                <button onClick={handleUndo} >Undo</button> 
+                <button onClick={handleRedo}>Redo</button>
+                <button onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button>
+                <button onClick={(event) => {handleDeleteList(event, idNamePair._id)}}>Delete</button> 
+                <button onClick={() => handleDuplicate()}>Duplicate</button>
+            </Grid>
+        }
+    }
 
     if(store.currentList !== null){
         if(store.currentList.publish){
@@ -209,6 +211,71 @@ function ListCard(props) {
         }
     }
 
+    if(store.currentList !== null){
+        if(store.currentList.publish){
+            likeCard=
+            <Grid item xs={2}
+                sx={{p: 5}}
+                style={{
+                    fontSize: '12pt'
+                }}>
+                    <IconButton aria-label="like" onClick={(event) => {handlelike(event, idNamePair._id)}} >
+                        <ThumbUpIcon/>
+                    </IconButton>
+
+                    <Typography
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                            display: "flex",
+                            alignItems: "center",
+                            color: "black",
+                        }}
+                        sx={{ pr: 6 }}>
+                        {idNamePair.likes.length}
+                    </Typography>
+                </Grid>
+            dislikeCard = 
+            <Grid item xs={2}
+                        sx={{p: 5}} 
+                style={{
+                    fontSize: '12pt'
+                }}>
+
+                        <IconButton aria-label="dislike" onClick={(event) => {handleDislike(event, idNamePair._id)}}>
+                            <ThumbDownIcon/>
+                        </IconButton>
+                        
+                        <Typography
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                            display: "flex",
+                            alignItems: "center",
+                            color: "black",
+                        }}
+                        sx={{ pr: 6 }}
+                        >
+                            {idNamePair.dislikes.length}
+                        </Typography>
+                </Grid>
+
+        }
+        else{
+            likeCard = 
+            <Grid item xs={2}
+                sx={{p: 5}}
+                style={{
+                    fontSize: '12pt'
+                }}></Grid>;
+            dislikeCard = 
+                <Grid item xs={2}
+                    sx={{p: 5}} 
+                    style={{
+                    fontSize: '12pt'}}> </Grid>
+        }
+    }
+
     function handleLoadList() {}
 
 
@@ -225,7 +292,7 @@ function ListCard(props) {
         }
         setEditActive(newActive);
     }
-
+    
     async function handleDeleteList(event, id) {
         event.stopPropagation();
         let _id = event.target.id;
@@ -263,21 +330,14 @@ function ListCard(props) {
         cardStatus = true;
     }
 
-    // let songCard ="";
-    // if(store){
-    //     console.log("STORE: ",store.currentList);
-    //     // songCard =
-    //     //     <List sx={{overflow: 'scroll'}}>
-    //     //         {store.currentList.songs.map((song, index) => (
-    //     //             <SongCard
-    //     //                 id={'playlist-song-' + (index)}
-    //     //                 key={'playlist-song-' + (index)}
-    //     //                 index={index}
-    //     //                 song={song}
-    //     //             />
-    //     //         ))  }
-    //     //     </List>
-    // }
+    function handleUndo() {
+        store.undo();
+      }
+    
+      function handleRedo() {
+        store.redo();
+      }
+
     console.log(idNamePair.likes);
     let cardElement =
         <ListItem
@@ -317,69 +377,9 @@ function ListCard(props) {
                     </Typography>
                     
                 </Grid>
-                {/* <Box sx={{ p: 0.5, flexGrow: 1 }}>
-                    <Stack direction="row">
-                        <Typography style={{ fontSize: "12px", fontWeight: "bold" }}>
-                            By: 
-                        </Typography>
-                        <Typography
-                            style={{
-                                fontSize: "12px",
-                                fontWeight: "bold",
-                                textDecoration: "underline",
-                                color: "blue",
-                            }}
-                            >
-                                {idNamePair.ownerEmail}
-                        </Typography>
-                    </Stack>
-                </Box> */}
                 <br />
-            <Grid item xs={2}
-                sx={{p: 5}}
-                style={{
-                    fontSize: '12pt'
-                }}>
-                        <IconButton aria-label="like" onClick={(event) => {handlelike(event, idNamePair._id)}} >
-                            <ThumbUpIcon/>
-                        </IconButton>
-
-                        <Typography
-                            style={{
-                                fontSize: "20px",
-                                fontWeight: "bold",
-                                display: "flex",
-                                alignItems: "center",
-                                color: "black",
-                            }}
-                            sx={{ pr: 6 }}>
-                            {idNamePair.likes.length}
-                        </Typography>
-                      
-                        </Grid>
-                        <Grid item xs={2}
-                        sx={{p: 5}} 
-                style={{
-                    fontSize: '12pt'
-                }}>
-
-                        <IconButton aria-label="dislike" onClick={(event) => {handleDislike(event, idNamePair._id)}}>
-                            <ThumbDownIcon/>
-                        </IconButton>
-                        
-                        <Typography
-                        style={{
-                            fontSize: "20px",
-                            fontWeight: "bold",
-                            display: "flex",
-                            alignItems: "center",
-                            color: "black",
-                        }}
-                        sx={{ pr: 6 }}
-                        >
-                            {idNamePair.dislikes.length}
-                        </Typography>
-                        </Grid>
+                        {likeCard}
+                        {dislikeCard}
                         
                     {publishDate}
                 <Grid item xs={3}>
@@ -406,7 +406,7 @@ function ListCard(props) {
                 >
                   {idNamePair.views}
                 </Typography>
-                </Grid>
+            </Grid>
                 
             <Grid item xs={3}>  
                 <ExpandMore 
@@ -440,16 +440,12 @@ function ListCard(props) {
                             {addSongs}
                         </Box>
                     </Stack>
-                    <Grid item xs={12}>
-                        <button>Undo</button> 
-                        <button>Redo</button>
-                        <button onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button>
-                        <button onClick={(event) => {handleDeleteList(event, idNamePair._id)}}>Delete</button> 
-                        <button onClick={() => handleDuplicate()}>Duplicate</button>
-                    </Grid>
+                    {publishStatus}
             </Collapse>
             </Grid> 
         </Grid>
+        {modalJSX}
+        <MUIDeleteModal />
         </ListItem>
 
     if (editActive) {

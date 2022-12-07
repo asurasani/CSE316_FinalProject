@@ -4,10 +4,12 @@ import Stack from '@mui/material/Stack';
 import { useHistory } from "react-router-dom";
 import Copyright from './Copyright'
 import { GlobalStoreContext } from '../store'
+import AuthContext from "../auth";
 
-export default function SplashScreen() {
+const SplashScreen = () => {
     // const { auth } = useContext(AuthContext);
     const history = useHistory();
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     
     const handleLogin = () => {
@@ -20,7 +22,9 @@ export default function SplashScreen() {
     }
 
     const handleGuestLogin = () => {
+        auth.registerUser("guest");
         store.setGuest();
+        store.loadGuestLists();
         history.push('/');
     }
 
@@ -45,3 +49,5 @@ export default function SplashScreen() {
         </div>
     )
 }
+
+export default SplashScreen;

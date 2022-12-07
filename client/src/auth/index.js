@@ -10,7 +10,8 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
-    REGISTER_USER: "REGISTER_USER"
+    REGISTER_USER: "REGISTER_USER",
+    GUEST: "GUEST"
 }
 
 function AuthContextProvider(props) {
@@ -54,6 +55,13 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: payload.loggedIn,
                     errorMessage: payload.errorMessage
+                })
+            }
+            case AuthActionType.GUEST:{
+                return setAuth({
+                    user: null,
+                    loggedIn: true,
+                    errorMessage: null
                 })
             }
             default:
@@ -130,6 +138,12 @@ function AuthContextProvider(props) {
             })
         }
     }
+
+    auth.continueAsGuest = async function () {
+        authReducer({
+          type: AuthActionType.GUEST,
+        });
+      };
 
     auth.logoutUser = async function() {
         const response = await api.logoutUser();

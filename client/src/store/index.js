@@ -262,6 +262,7 @@ function GlobalStoreContextProvider(props) {
                 let pairsArray = response.data.idNamePairs;
                 console.log(pairsArray);
                 console.log(pairsArray[0].name);
+
                 pairsArray.sort((element1, element2) => {
                     let name1 = element1.name, 
                     name2 = element2.name;
@@ -279,6 +280,78 @@ function GlobalStoreContextProvider(props) {
         }
         getListPairs();
     }
+
+    store.sortDate = function(){
+        async function getListPairs(){
+            const response = await api.getPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                console.log(pairsArray[0].name);
+
+                const dateArray = pairsArray.sort((element1, element2) =>
+                    element2.date - element1.date
+                );
+                pairsArray.forEach((e) => console.log(e));
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: dateArray
+                });
+            }
+        }
+        getListPairs();
+    }
+
+    store.sortLikes = function(){
+        async function getListPairs(){
+            const response = await api.getPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                console.log(pairsArray[0].name);
+
+                const dateArray = pairsArray.sort(({likesCount:a}, {likesCount:b}) => b-a);
+                pairsArray.forEach((e) => console.log(e));
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: dateArray
+                });
+            }
+        }
+        getListPairs();
+    }
+
+    store.sortDislikes = function(){
+        async function getListPairs(){
+            const response = await api.getPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                console.log(pairsArray[0].name);
+
+                const dateArray = pairsArray.sort(({dislikesCount:a}, {dislikesCount:b}) => b-a);
+                pairsArray.forEach((e) => console.log(e));
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: dateArray
+                });
+            }
+        }
+        getListPairs();
+    }
+
+    store.addComment = async function (comment) {
+        async function update() {
+          let object = {
+            name: auth.user.username,
+            comment: comment,
+          };
+          store.currentList.comments.push(object);
+          await store.updateCurrentList();
+        }
+    
+        update();
+      };
 
     // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
     // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN 
@@ -353,20 +426,9 @@ function GlobalStoreContextProvider(props) {
             const response = await api.getPlaylistById(id);
             if(response.data.success){
                 let playlist = response.data.playlist;
+
                 playlist.publish = true;
-                let status = "";
-
-                const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-                const timeStamp = new Date();
-                let year = timeStamp.getFullYear();
-                let month = months[timeStamp.getMonth()];
-                let day = timeStamp.getDate();
-                status = month + " " + day + ","+ year;
-                console.log(status);
-
-                console.log("STATUS:", status);
-                playlist.publishDate = status;
+                playlist.publishDate = new Date();
                 
                 async function updateList(playlist) {
                     const response = await api.updatePlaylistById(playlist._id, playlist);
@@ -388,6 +450,24 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncPublishDateList(id);
+    }
+
+    store.loadGuestLists = function () {
+        async function asyncLoadIdNamePairs() {
+            const response = await api.getPublishedPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadIdNamePairs();
     }
     
 
@@ -508,6 +588,7 @@ function GlobalStoreContextProvider(props) {
 
                 let user = auth.user._id;
                 playlist.likes.push(user);
+                playlist.likesCount = playlist.likesCount + 1;
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 console.log(response.data.success);
                 if (response.data.success) {
@@ -542,6 +623,8 @@ function GlobalStoreContextProvider(props) {
                 let index = playlist.likes.indexOf(user);
                 playlist.likes.splice(index, 1);
 
+                playlist.likesCount = playlist.likesCount - 1;
+
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 console.log(response.data.success);
                 if (response.data.success) {
@@ -574,6 +657,8 @@ function GlobalStoreContextProvider(props) {
 
                 let user = auth.user._id;
                 playlist.dislikes.push(user);
+
+                playlist.dislikesCount = playlist.dislikesCount + 1;
 
 
                 console.log("DisLikes",playlist.dislikes);
@@ -610,6 +695,8 @@ function GlobalStoreContextProvider(props) {
                 let user = auth.user._id;
                 let index = playlist.dislikes.indexOf(user);
                 playlist.dislikes.splice(index, 1);
+
+                playlist.dislikesCount = playlist.dislikesCount - 1;
 
                 console.log("DisLikes",playlist.dislikes);
                 response = await api.updatePlaylistById(playlist._id, playlist);
